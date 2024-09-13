@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('../../infrastructure/database/database');
 
 class AttendeeRepository {
     async getAttendeeById(id) {

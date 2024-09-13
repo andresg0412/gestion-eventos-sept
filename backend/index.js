@@ -1,27 +1,16 @@
-const express = require('express');
+const AppModule = require('./application/AppModule');
+const UserModule = require('./application/modules/UserModule');
+const EventModule = require('./application/modules/EventModule');
+const ServerModule = require('./application/modules/ServerModule');
 
-require('dotenv').config();
-const { server, database, jwt, mapbox, swagger, logging } = require('./resources/application.json');
+async function startAppplication() {
+    const appModule = new AppModule();
 
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const db = require('./domain/database');
+    appModule.register(new UserModule(appModule));
+    appModule.register(new EventModule(appModule));
+    appModule.register(new ServerModule(appModule));
 
-const app = express();
+    await appModule.start();
+}
 
-app.use(bodyParser.json());
-
-app.use(express.json());
-app.use(cookieParser());
-
-
-
-app.get('/', (req, res) => {
-    res.send('Conectado');
-});
-
-
-app.listen(server.port, () => {
-    console.log(`Example app listening at http://localhost:${server.port}`);
-})
+startAppplication().catch(console.error);
