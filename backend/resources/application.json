@@ -1,0 +1,30 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 5000
+  },
+  "database": {
+    "mysql": {
+      "host": "localhost",
+      "port": 3306,
+      "username": "root",
+      "password": "1234",
+      "name": "proyecto-eventos"
+    }
+  },
+  "jwt": {
+    "secret": "DkRYBtGCPWQrv/fK8MEmqzuwHF3JhpaUT5d2V6j9",
+    "expiresIn": "1h"
+  },
+  "mapbox": {
+    "access_token": ""
+  },
+  "swagger": {
+    "title": "Event Management API",
+    "version": "1.0.0"
+  },
+  "logging": {
+    "level": "debug",
+    "format": "%date% %pid% %level% %message%"
+  }
+}
