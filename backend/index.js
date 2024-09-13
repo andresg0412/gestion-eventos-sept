@@ -1,16 +1,27 @@
+const express = require('express');
 const AppModule = require('./application/AppModule');
 const UserModule = require('./application/modules/UserModule');
 const EventModule = require('./application/modules/EventModule');
-const ServerModule = require('./application/modules/ServerModule');
+const serverConfig = require('./resources/application.json').server;
+const { app } = require('./infrastructure/server');
+
 
 async function startAppplication() {
     const appModule = new AppModule();
 
-    appModule.register(new UserModule(appModule));
-    appModule.register(new EventModule(appModule));
-    appModule.register(new ServerModule(appModule));
+    appModule.addModule(new UserModule());
+    appModule.addModule(new EventModule());
 
-    await appModule.start();
+    await Promise.all([
+        UserModule.prototype.start(),
+        EventModule.prototype.start(),
+        appModule.start().then(() => {
+            console.log(`Servidor iniciado en http://localhost:${serverConfig.port}`);
+            app.listen(serverConfig.port, () => {
+                console.log(`Escuchando en http://localhost:${serverConfig.port}`);
+            });
+        })
+    ]);
 }
 
 startAppplication().catch(console.error);

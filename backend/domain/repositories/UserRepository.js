@@ -5,12 +5,13 @@ class UserRepository {
         try {
             const query = 'SELECT * FROM users';
             const [rows] = await db.execute(query);
-            return rows;
+            console.log(rows);
+            return rows.length > 0 ? rows : [];
         } catch (error) {
-            throw error;
+            console.error('Error en getAllUsers:', error);
+            throw { status: 500, body: { message: 'Error al obtener usuarios repository' } };
         }
     }
-
     async getUserById(id) {
         try {
             const query = 'SELECT * FROM users WHERE id = ?';
@@ -27,6 +28,9 @@ class UserRepository {
             const [rows] = await db.execute(query, [user.username, user.email, user.password]);
             return rows.insertId;
         } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+                throw { status: 409, body: { message: 'Usuario ya existe' } };
+            }
             throw error;
         }
     }

@@ -1,23 +1,30 @@
-const EventService = require('../../usecases/EventServiceUseCase');
-const EventController = require('../http/eventController');
+const EventServiceUseCase = require('../../domain/usecases/EventServiceUseCase');
+const EventController = require('../../infrastructure/adapters/http/eventController');
 const EventRepository = require('../../domain/repositories/EventRepository');
-
 class EventModule {
-    constructor(appModule) {
-        this.appModule = appModule;
-        this.EventService = null;
+    constructor() {
+        this.EventServiceUseCase = null;
         this.EventController = null;
         this.EventRepository = null;
+        this.expressRouter = null;
     }
 
     async start() {
-        this.EventService = new EventService(this.EventRepository);
-        this.EventController = new EventController(this.EventService);
-        this.EventRepository = new EventRepository();
+        try {
+            const express = require('express');
+            this.expressRouter = express.Router();
 
-        const expressRouter = await this.appModule.getExpressRouter();
-        expressRouter.use('/events', this.EventController.getRouter());
+            this.EventRepository = new EventRepository();
+            this.EventServiceUseCase = new EventServiceUseCase(this.EventRepository);
+            this.EventController = new EventController(this.EventService);
+
+            this.expressRouter.post('/events', (req, res) => this.EventController.handleRequest(req, res));
+            console.log('Modulo Event iniciado');
+        } catch (error) {
+            console.error(error);
+        }
     }
+
 
     getDependencies() {
         return ['express'];

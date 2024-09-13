@@ -1,27 +1,36 @@
-const UserServiceUseCase = require('../../usecases/UserServiceUseCase');
-const UserController = require('../http/userController');
+const express = require('express');
+const UserServiceUseCase = require('../../domain/usecases/UserServiceUseCase');
+const UserController = require('../../infrastructure/adapters/http/userController');
 const UserRepository = require('../../domain/repositories/UserRepository');
-
-class UserModule {
-    constructor(appModule) {
-        this.appModule = appModule;
+class UserModule{
+    constructor() {
         this.UserServiceUseCase = null;
         this.UserController = null;
         this.UserRepository = null;
+        this.expressRouter = null;
     }
 
     async start() {
-        this.UserServiceUseCase = new UserServiceUseCase(this.UserRepository);
-        this.UserController = new UserController(this.UserServiceUseCase);
-        this.UserRepository = new UserRepository();
+        try {
+            const server = express();
+            this.expressRouter = server.use(express.json());
 
-        const expressRouter = await this.appModule.getExpressRouter();
-        expressRouter.use('/users', this.UserController.getRouter());
+            this.UserRepository = new UserRepository();
+            this.UserServiceUseCase = new UserServiceUseCase(this.UserRepository);
+            this.UserController = new UserController(this.UserServiceUseCase);
+
+            this.expressRouter.post('/users', (req, res) => {
+                this.UserController.handleRequest(req, res);
+            });
+            console.log('Modulo User iniciado');
+        } catch (error) {
+            console.error(error);
+            
+        }
     }
 
     getDependencies() {
         return ['express'];
     }
 }
-
 module.exports = UserModule;

@@ -1,6 +1,17 @@
 class UserServiceUseCase {
-    createUser({ username, email, password }) {
-        return User.create({ username, email, password });
+    constructor(UserRepository) {
+        this.UserRepository = UserRepository;
+    }
+    async getAllUsers() {
+        try {
+            const users = await this.UserRepository.getAllUsers();
+            return { status: 200, body: users };
+        } catch (error) {
+            return { status: 500, body: { message: 'Error al obtener usuarios use case' } };
+        }
+    }
+    async createUser({ username, email, password }) {
+        return this.UserRepository.createUser({ username, email, password });
     }
 
     updateUser({ id, username, email, password }) {
@@ -20,3 +31,5 @@ class UserServiceUseCase {
     }
 
 }
+
+module.exports = UserServiceUseCase;
