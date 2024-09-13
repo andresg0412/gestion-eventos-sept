@@ -1,6 +1,17 @@
 const db = require('../../infrastructure/database/database');
 
 class EventRepository {
+
+    async getAllEvents() {
+        try {
+            const query = 'SELECT * FROM events';
+            const [rows] = await db.execute(query);
+            return rows.length > 0 ? rows : [];
+        } catch (error) {
+            console.error('Error en getAllEvents:', error);
+            throw { status: 500, body: { message: 'Error al obtener eventos repository' } };
+        }
+    }
     async getEventById(id) {
         try {
             const query = 'SELECT * FROM events WHERE id = ?';
@@ -13,10 +24,13 @@ class EventRepository {
 
     async createEvent(event) {
         try {
-            const query = 'INSERT INTO events (title, description, start_date, end_date, location, max_attendees, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            const query = 'INSERT INTO events (title, description, start_date, end_date, location, max_attendees, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)';
             const [rows] = await db.execute(query, [event.title, event.description, event.startDate, event.endDate, event.location, event.maxAttendees, event.createdBy]);
-            return rows.insertId;
+            return rows;
         } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+                throw { status: 409, body: { message: 'Evento ya existe' } };
+            }
             throw error;
         }
     }

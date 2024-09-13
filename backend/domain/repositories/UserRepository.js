@@ -24,9 +24,9 @@ class UserRepository {
 
     async createUser(user) {
         try {
-            const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+            const query = 'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)';
             const [rows] = await db.execute(query, [user.username, user.email, user.password]);
-            return rows.insertId;
+            return rows;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
                 throw { status: 409, body: { message: 'Usuario ya existe' } };

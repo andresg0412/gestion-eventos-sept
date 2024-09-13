@@ -11,7 +11,12 @@ class UserServiceUseCase {
         }
     }
     async createUser({ username, email, password }) {
-        return this.UserRepository.createUser({ username, email, password });
+        try {
+            const user = await this.UserRepository.createUser({ username, email, password });
+            return { status: 200, body: user };
+        } catch (error) {
+            return { status: 500, body: { message: 'Error al crear usuario use case' } };
+        }
     }
 
     updateUser({ id, username, email, password }) {
