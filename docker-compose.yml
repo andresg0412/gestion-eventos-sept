@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend/build:/usr/share/nginx/html
+    networks:
+      - my-network
+
+  backend:
+    build:
+      context: ./backend
+    env_file: ./backend/.env
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+    networks:
+      - my-network
+
+  db:
+    image: mysql:8.0
+    volumes:
+      - ./backend/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    networks:
+      - my-network
+    healthcheck:
+      test: "exit 0"
+    
+networks:
+  my-network:
+    driver: bridge
