@@ -6,12 +6,12 @@ const serverConfig = require('../resources/application.json').server;
 const routes = require('./adapters/http/routes/index');
 const routerUser = require('./adapters/http/routes/routesUser');
 const routerEvent = require('./adapters/http/routes/routesEvent');
+const routerAttendee = require('./adapters/http/routes/routerAttendee');
 const app = express();
 
 
 const locationService = new LocationService();
 //const fileProcessor = new FileProcessor();
-
 
 app.use(express.json());
 
@@ -29,6 +29,7 @@ app.use('/api', routerUser);
 app.use('/api', routerEvent);
 
 //RUTAS DE ASISTENTES
+app.use('/api', routerAttendee);
 
 app.post('/locations/:lat/:lon', async (req, res) => {
     const { lat, lon } = await locationService.getNearbyLocations(req.params.lat, req.params.lon);

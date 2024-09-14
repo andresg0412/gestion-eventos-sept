@@ -33,3 +33,6 @@ CREATE TABLE attendees (
 CREATE INDEX idx_events_created_by ON events(created_by);
 CREATE INDEX idx_attendees_user_id ON attendees(user_id);
 CREATE INDEX idx_attendees_event_id ON attendees(event_id);
+
+ALTER TABLE attendees
+ADD UNIQUE idx_unique_attendee_event (email, event_id);
