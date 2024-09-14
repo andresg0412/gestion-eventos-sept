@@ -1,4 +1,6 @@
 const db = require('../../infrastructure/database/database');
+const { User } = require('../../domain/entities/User');
+const { PasswordUtils } = require('../../domain/utils/PasswordUtils');
 
 class UserRepository {
     async getAllUsers() {
@@ -21,11 +23,11 @@ class UserRepository {
             throw error;
         }
     }
-
     async createUser(user) {
         try {
+            const passwordHash = PasswordUtils.hashPassword(user.password);
             const query = 'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)';
-            const [rows] = await db.execute(query, [user.username, user.email, user.password]);
+            const [rows] = await db.execute(query, [user.username, user.email, passwordHash]);
             return rows;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
@@ -60,6 +62,16 @@ class UserRepository {
             const query = 'SELECT * FROM events WHERE user_id = ?';
             const [rows] = await db.execute(query, [id]);
             return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUserByUseremail(email) {
+        try {
+            const query = 'SELECT * FROM users WHERE email = ?';
+            const [rows] = await db.execute(query, [email]);
+            return rows[0];
         } catch (error) {
             throw error;
         }

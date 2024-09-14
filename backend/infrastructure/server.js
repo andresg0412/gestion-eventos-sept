@@ -9,7 +9,7 @@ const LocationService = require('./adapters/file/locationService');
 //const FileProcessor = require('./adapters/file/fileProcessor');
 const AppModule = require('../application/AppModule');
 const serverConfig = require('../resources/application.json').server;
-
+const routes = require('./adapters/http/routes/index');
 const app = express();
 
 
@@ -17,6 +17,7 @@ const locationService = new LocationService();
 //const fileProcessor = new FileProcessor();
 const userServiceUseCase = new UserServiceUseCase(new UserRepository());
 const userController = new UserController(userServiceUseCase);
+
 const eventServiceUseCase = new EventServiceUseCase(new EventRepository());
 const eventController = new EventController(eventServiceUseCase);
 
@@ -26,6 +27,9 @@ app.use(express.json());
 app.get('/health', (req, res) => {
     res.send('OK');
 });
+
+//LOGIN
+app.use('/api', routes);
 
 //RUTAS DE USER
 app.post('/users', (req, res) => {
@@ -55,7 +59,12 @@ app.put('/events/:id', (req, res) => {
 
 app.delete('/events/:id', (req, res) => {
     eventController.deleteEvent(req, res);
-})
+});
+
+//RUTAS DE ASISTENTES
+
+
+
 app.post('/locations/:lat/:lon', async (req, res) => {
     const { lat, lon } = await locationService.getNearbyLocations(req.params.lat, req.params.lon);
     res.send({ lat, lon });

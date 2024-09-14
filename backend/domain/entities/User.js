@@ -32,6 +32,10 @@ class User{
     getEventsCreatedCount() {
         return this.eventsCreated.length;
     }
+
+    setPassword(password) {
+        this.password = password;
+    }
 }
 
 module.exports = User;
