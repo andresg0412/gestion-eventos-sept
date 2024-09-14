@@ -1,6 +1,6 @@
 const express = require('express');
 const UserServiceUseCase = require('../../domain/usecases/UserServiceUseCase');
-const UserController = require('../../infrastructure/adapters/http/userController');
+const UserController = require('../../infrastructure/adapters/http/controllers/userController');
 const UserRepository = require('../../domain/repositories/UserRepository');
 class UserModule{
     constructor() {

@@ -1,5 +1,5 @@
 const EventServiceUseCase = require('../../domain/usecases/EventServiceUseCase');
-const EventController = require('../../infrastructure/adapters/http/eventController');
+const EventController = require('../../infrastructure/adapters/http/controllers/eventController');
 const EventRepository = require('../../domain/repositories/EventRepository');
 class EventModule {
     constructor() {
