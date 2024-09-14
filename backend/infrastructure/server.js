@@ -7,6 +7,7 @@ const routes = require('./adapters/http/routes/index');
 const routerUser = require('./adapters/http/routes/routesUser');
 const routerEvent = require('./adapters/http/routes/routesEvent');
 const routerAttendee = require('./adapters/http/routes/routerAttendee');
+const routerGeolocation = require('./adapters/http/routes/routesGeolocation');
 const app = express();
 
 
@@ -30,6 +31,9 @@ app.use('/api', routerEvent);
 
 //RUTAS DE ASISTENTES
 app.use('/api', routerAttendee);
+
+//RUTAS DE UBICACIONES
+app.use('/api', routerGeolocation);
 
 app.post('/locations/:lat/:lon', async (req, res) => {
     const { lat, lon } = await locationService.getNearbyLocations(req.params.lat, req.params.lon);
