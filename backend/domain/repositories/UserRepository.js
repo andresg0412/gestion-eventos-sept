@@ -1,8 +1,9 @@
 const db = require('../../infrastructure/database/database');
 const { User } = require('../../domain/entities/User');
-const { PasswordUtils } = require('../../domain/utils/PasswordUtils');
+const PasswordUtils = require('../utils/PasswordUtils');
 
 class UserRepository {
+    
     async getAllUsers() {
         try {
             const query = 'SELECT * FROM users';
@@ -25,7 +26,7 @@ class UserRepository {
     }
     async createUser(user) {
         try {
-            const passwordHash = PasswordUtils.hashPassword(user.password);
+            const passwordHash = await PasswordUtils.hashPassword(user.password);
             const query = 'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)';
             const [rows] = await db.execute(query, [user.username, user.email, passwordHash]);
             return rows;

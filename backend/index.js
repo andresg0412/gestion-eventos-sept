@@ -5,7 +5,6 @@ const EventModule = require('./application/modules/EventModule');
 const serverConfig = require('./resources/application.json').server;
 const { app } = require('./infrastructure/server');
 
-
 async function startAppplication() {
     const appModule = new AppModule();
 

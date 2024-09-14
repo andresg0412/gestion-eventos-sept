@@ -9,11 +9,10 @@ class AuthController {
         try {
             const { email, password } = req.body;
             const result = await this.AuthUseCase.loginUser({ email, password });
-            res.status(result.status).json(result.body);
+            res.status(200).json(result.body);
         } catch (error) {
             res.status(error.status).json(error.body);
         }
     }
 }
-
 module.exports = AuthController;

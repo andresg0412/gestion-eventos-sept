@@ -39,7 +39,6 @@ app.post('/users', (req, res) => {
 app.get('/users', (req, res) => {
     userController.getAllUsers(req, res);
 });
-
 //RUTAS DE EVENTOS
 app.post('/events', (req, res) => {
     eventController.createEvent(req, res);

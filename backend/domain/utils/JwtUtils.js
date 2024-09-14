@@ -5,17 +5,17 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 class JwtUtils {
 
-    static generateToken(user) {
+    static async generateToken(user) {
         return jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
     }
 
-    static verifyToken(token) {
+    static async verifyToken(token) {
         try {
-            return jwt.verify(token, JWT_SECRET);
+            const result = await jwt.verify(token, JWT_SECRET);
+            return result
         } catch (err) {
             throw new Error('Invalid token');
         }
     }
 }
-
 module.exports = JwtUtils;

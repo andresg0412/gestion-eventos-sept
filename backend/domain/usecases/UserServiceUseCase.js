@@ -18,7 +18,6 @@ class UserServiceUseCase {
             return { status: 500, body: { message: 'Error al crear usuario use case' } };
         }
     }
-
     updateUser({ id, username, email, password }) {
         return User.update({ id, username, email, password });
     }
