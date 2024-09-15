@@ -2,11 +2,14 @@ class UserController {
     constructor(UserServiceUseCase) {
         this.UserServiceUseCase = UserServiceUseCase;
     }
-    async handleRequest(req, res) {
+    async createUser(req, res) {
         try {
+            if (!req.body.username || !req.body.email || !req.body.password) {
+                throw { status: 400, body: { message: 'Todos los campos son requeridos' } };
+            }
             const { username, email, password } = req.body;
             const result = await this.UserServiceUseCase.createUser({ username, email, password });
-            res.status(result.status).json({ message: 'User created successfully' });
+            res.status(result.status).json({ message: 'Usuario creado con éxito' });
         } catch (error) {
             res.status(error.status).json(error.body);
         }
@@ -21,4 +24,5 @@ class UserController {
         }
     }
 }
+
 module.exports = UserController;

@@ -16,6 +16,7 @@ class EventRepository {
         try {
             const query = 'SELECT * FROM events WHERE id = ?';
             const [rows] = await db.execute(query, [id]);
+            
             return rows[0];
         } catch (error) {
             throw error;
@@ -26,6 +27,7 @@ class EventRepository {
         try {
             const query = 'INSERT INTO events (title, description, start_date, end_date, location, max_attendees, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)';
             const [rows] = await db.execute(query, [event.title, event.description, event.startDate, event.endDate, event.location, event.maxAttendees, event.createdBy]);
+            
             return rows;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
@@ -35,11 +37,13 @@ class EventRepository {
         }
     }
 
-    async updateEvent(event) {
+    async updateEvent(id, fieldsToUpdate) {
         try {
-            const query = 'UPDATE events SET title = ?, description = ?, start_date = ?, end_date = ?, location = ?, max_attendees = ? WHERE id = ?';
-            const [rows] = await db.execute(query, [event.title, event.description, event.startDate, event.endDate, event.location, event.maxAttendees, event.id]);
-            return rows.affectedRows > 0;
+            const query = `UPDATE events SET ${Object.keys(fieldsToUpdate).map(field => `${field} = ?`).join(', ')} WHERE id = ?`;
+            const values = [...Object.values(fieldsToUpdate), id];
+
+            const [result] = await db.execute(query, values);
+            return result;
         } catch (error) {
             throw error;
         }
@@ -65,4 +69,5 @@ class EventRepository {
         }
     }
 }
+
 module.exports = EventRepository

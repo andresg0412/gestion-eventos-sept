@@ -10,11 +10,10 @@ const userServiceUseCase = new UserServiceUseCase(new UserRepository());
 const userController = new UserController(userServiceUseCase);
 
 //RUTAS DE USER
-router.post('/users', (req, res) => {
-    userController.handleRequest(req, res);
+router.post('/user', (req, res) => {
+    userController.createUser(req, res);
 });
 router.get('/users', (req, res) => {
     userController.getAllUsers(req, res);
 });
-
 module.exports = router

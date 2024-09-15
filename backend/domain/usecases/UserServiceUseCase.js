@@ -33,7 +33,6 @@ class UserServiceUseCase {
     getUserEvents(id) {
         return User.getEvents(id);
     }
-
 }
 
 module.exports = UserServiceUseCase;
