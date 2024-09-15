@@ -1,0 +1,432 @@
+# swagger.yaml
+openapi: 3.0.0
+info:
+  title: API de Productos y Autenticación
+  description: API para manejar la autenticación de usuarios y gestión de productos.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:5001'
+    description: Servidor local
+paths:
+  /api/login:
+    post:
+      summary: Login de usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Nombre de usuario
+                password:
+                  type: string
+                  description: Contraseña
+      responses:
+        200:
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token de autenticación
+                  message:
+                    type: string
+                    description: Mensaje de éxito
+        401:
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de autenticación
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/user:
+    post:
+      summary: Crear usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Nombre de usuario
+                email:
+                  type: string
+                  description: Correo electrónico
+                password:
+                  type: string
+                  description: Contraseña
+      responses:
+        200:
+          description: Creación exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de éxito
+        400:
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de autenticación
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/users:
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        200:
+          description: Obtención exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID del usuario
+                    username:
+                      type: string
+                      description: Nombre de usuario
+                    email:
+                      type: string
+                      description: Correo electrónico
+                    createdAt:
+                      type: string
+                      description: Fecha de creación
+                    updatedAt:
+                      type: string
+                      description: Fecha de actualización
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/events:
+    get:
+      summary: Obtener todos los eventos
+      responses:
+        200:
+          description: Obtención exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID del evento
+                    title:
+                      type: string
+                      description: Título del evento
+                    description:
+                      type: string
+                      description: Descripción del evento
+                    date:
+                      type: string
+                      description: Fecha del evento
+                    createdAt:
+                      type: string
+                      description: Fecha de creación
+                    updatedAt:
+                      type: string
+                      description: Fecha de actualización
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/event/{id}:
+    get:
+      summary: Obtener un evento por su ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID del evento
+      responses:
+        200:
+          description: Obtención exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID del evento
+                  title:
+                    type: string
+                    description: Título del evento
+                  description:
+                    type: string
+                    description: Descripción del evento
+                  date:
+                    type: string
+                    description: Fecha del evento
+                  createdAt:
+                    type: string
+                    description: Fecha de creación
+                  updatedAt:
+                    type: string
+                    description: Fecha de actualización
+        404:
+          description: Evento no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/event:
+    post:
+      summary: Crear evento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Título del evento
+                description:
+                  type: string
+                  description: Descripción del evento
+                date:
+                  type: string
+                  description: Fecha del evento
+      responses:
+        201:
+          description: Creación exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de éxito
+        400:
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de autenticación
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/attendee:
+    post:
+      summary: Crear asistente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: string
+                  description: ID del evento
+                userId:
+                  type: string
+                  description: ID del usuario
+      responses:
+        201:
+          description: Creación exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de éxito
+        400:
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de autenticación
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/attendees/{eventId}:
+    get:
+      summary: Obtener asistentes por evento
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: string
+            description: ID del evento
+      responses:
+        200:
+          description: Obtención exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID del asistente
+                    eventId:
+                      type: string
+                      description: ID del evento
+                    userId:
+                      type: string
+                      description: ID del usuario
+                    createdAt:
+                      type: string
+                      description: Fecha de creación
+                    updatedAt:
+                      type: string
+                      description: Fecha de actualización
+        404:
+          description: Evento no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor
+  /api/locations:
+    get:
+      summary: Obtener ubicaciones cercanas
+      responses:
+        200:
+          description: Obtención exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID de la ubicación
+                    name:
+                      type: string
+                      description: Nombre de la ubicación
+                    lat:
+                      type: number
+                      description: Latitud
+                    lng:
+                      type: number
+                      description: Longitud
+                    createdAt:
+                      type: string
+                      description: día de creación
+                    updatedAt:
+                      type: string
+                      description: día de actualización
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error de servidor

@@ -19,6 +19,12 @@ class ValidationsUtils {
 
         return errors.length === 0 ? null : errors;
     }
+
+    static async validateStartDate(startString){
+        const date = new Date(startString);
+        const now = new Date();
+        return date.getTime() > now.getTime();
+    }
 }
 
 module.exports = ValidationsUtils;

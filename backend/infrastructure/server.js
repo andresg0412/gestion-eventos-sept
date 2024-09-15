@@ -9,6 +9,8 @@ const routerAttendee = require('./adapters/http/routes/routerAttendee');
 const routerGeolocation = require('./adapters/http/routes/routesGeolocation');
 const routerFileProcessor = require('./adapters/http/routes/routeFileProcessor');
 const routerArrayManagement = require('./adapters/http/routes/routesArrayManagement');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const app = express();
 
 app.use(express.json());
@@ -33,5 +35,9 @@ app.use('/api', routerFileProcessor);
 
 //RUTAS ANALISIS DE MATRICES
 app.use('/api', routerArrayManagement);
+
+//DOCUMENTACION SWAGGER
+const swaggerDocument = YAML.load('./swagger.yml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = { app, serverConfig };

@@ -1,3 +1,4 @@
+const ValidationsUtils = require('../utils/ValidationsUtils');
 class EventServiceUseCase {
     constructor(EventRepository) {
         this.EventRepository = EventRepository;
@@ -5,11 +6,21 @@ class EventServiceUseCase {
 
     async createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy }) {
         try {
+            const now = new Date();
+            const validationStartDate = await ValidationsUtils.validateStartDate(startDate);
+            if (!validationStartDate) {
+                return { status: 400, body: { message: 'Fecha de inicio inválida' } };
+            }
+
+            if(new Date(endDate).getTime() < new Date(startDate).getTime()) {
+                return { status: 400, body: { message: 'Fecha de finalización inválida' } };
+            }
+
             const event = await this.EventRepository.createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy });
             if (!event) {
                 return { status: 500, body: { message: 'Error al crear evento' } };
             }
-            return { status: 200, body: event };
+            return { status: 200, body: { message: 'Evento creado correctamente' } };
         } catch (error) {
             return { status: 500, body: { message: 'Error al crear evento' } };
         }

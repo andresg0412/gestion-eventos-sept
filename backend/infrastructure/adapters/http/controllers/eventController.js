@@ -15,7 +15,7 @@ class EventController{
             }
 
             const result = await this.EventServiceUseCase.createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy });
-            res.status(result.status).json({ message: 'Evento creado con éxito' });
+            res.status(result.status).json(result.body);
             
         } catch (error) {
             res.status(error.status).json(error.body);
