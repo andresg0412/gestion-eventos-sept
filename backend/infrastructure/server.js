@@ -8,6 +8,7 @@ const routerEvent = require('./adapters/http/routes/routesEvent');
 const routerAttendee = require('./adapters/http/routes/routerAttendee');
 const routerGeolocation = require('./adapters/http/routes/routesGeolocation');
 const routerFileProcessor = require('./adapters/http/routes/routeFileProcessor');
+const routerArrayManagement = require('./adapters/http/routes/routesArrayManagement');
 const app = express();
 
 app.use(express.json());
@@ -29,5 +30,8 @@ app.use('/api', routerGeolocation);
 
 //RUTAS DE PROCESAMIENTO DE ARCHIVOS
 app.use('/api', routerFileProcessor);
+
+//RUTAS ANALISIS DE MATRICES
+app.use('/api', routerArrayManagement);
 
 module.exports = { app, serverConfig };
