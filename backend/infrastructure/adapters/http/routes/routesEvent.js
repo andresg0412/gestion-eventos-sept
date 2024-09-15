@@ -10,6 +10,7 @@ const authenticateToken = require('../middlewares/authMiddleware');
 const eventServiceUseCase = new EventServiceUseCase(new EventRepository());
 const eventController = new EventController(eventServiceUseCase);
 
+
 //RUTAS DE EVENTOS
 router.post('/events', (req, res) => {
     eventController.createEvent(req, res);

@@ -48,5 +48,4 @@ class EventServiceUseCase {
         }
     }
 }
-
 module.exports = EventServiceUseCase;

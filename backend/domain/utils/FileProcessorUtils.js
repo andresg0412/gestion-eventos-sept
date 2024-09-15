@@ -2,49 +2,57 @@ const fs = require('fs');
 const path = require('path');
 const { Workbook } = require('exceljs');
 const { promisify } = require('util');
+const { read, utils } = require('xlsx');
 
 
 const readFileAsync = promisify(fs.readFile);
+class FileProcessorUtils {
 
-async function importEvents(file) {
-    const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet('Sheet1');
+    static async importEvents(file) {
+        console.log('Importando eventos...');
+        try {
+            const fileBuffer = await readFileAsync(file.path);
+            const workbook = read(fileBuffer, { type: 'buffer' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
 
-    const fileBuffer = await readFileAsync(file.path);
-    await worksheet.loadAtBuffer(fileBuffer);
+            const events = [];
+            const range = utils.decode_range(worksheet['!ref']);
 
-    const rows = worksheet.rows;
-    const events = [];
+            for (let i = range.s.r + 2; i <= range.e.r; i++) {
+                const row = utils.encode_row(i);
+                const cellRef = `${utils.encode_col(range.s.c)}${row}`;
 
-    for (let i = 2; i < rows.length; i++) {
-        const row = rows[i];
+                if (worksheet[cellRef] && worksheet[cellRef].v !== undefined) {
+                    const values = utils.sheet_to_json(worksheet, { header: 1 })[i - 1];
 
-        if (row.values.length > 0) continue;
+                    if (values.length > 0) {
+                        const [title, description, startDate, endDate, location, maxAttendees, createdBy] = values;
+                        const event = {
+                            title: title?.toString() ?? '',
+                            description: description?.toString() ?? '',
+                            startDate: startDate ? new Date(startDate) : null,
+                            endDate: endDate ? new Date(endDate) : null,
+                            location: location?.toString() ?? '',
+                            maxAttendees: maxAttendees ? parseInt(maxAttendees.toString(), 10) : 0,
+                            createdBy: createdBy?.toString() ?? ''
+                        };
+                        events.push(event);
+                    } else {
+                        console.log('No se encontraron valores en la fila:', i);
+                    }
+                }
+            }
 
-        const eventName = row.values[0].value;
-        const eventDescription = row.values[1].value;
-        const startDate = new Date(row.values[2].value);
-        const endDate = new Date(row.values[3].value);
-        const eventLocation = row.values[4].value;
-        const maxAttendees = row.values[5].value;
-        const createdBy = row.values[6].value;
+            console.log('Archivo cargado correctamente');
 
-        const event = {
-            name: eventName,
-            description: eventDescription,
-            startDate: startDate,
-            endDate: endDate,
-            location: eventLocation,
-            maxAttendees: maxAttendees,
-            createdBy: createdBy
+            return events;
+
+        } catch (error) {
+            console.error('Error al cargar el archivo:', error);
+            throw new Error('No se pudo cargar el archivo Excel');
         }
-
-        events.push(event);
     }
-    workbook.xlsx.writeBuffer().then((buffer) => {
-        console.log('Proceso completado')
-    });
-
-    return events;
 }
-module.exports = importEvents;
+
+module.exports = FileProcessorUtils;

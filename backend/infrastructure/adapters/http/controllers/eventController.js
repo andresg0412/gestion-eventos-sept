@@ -6,8 +6,14 @@ class EventController{
     async createEvent(req, res) {
         try {
             const { title, description, startDate, endDate, location, maxAttendees, createdBy } = req.body;
+
+            if (!title || !description || !startDate || !endDate || !location || !maxAttendees || !createdBy) {
+                throw { status: 400, body: { message: 'All fields are required' } };
+            }
+
             const result = await this.EventServiceUseCase.createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy });
             res.status(result.status).json({ message: 'Event created successfully' });
+            
         } catch (error) {
             res.status(error.status).json(error.body);
         }
@@ -53,5 +59,4 @@ class EventController{
         }
     }
 }
-
 module.exports = EventController;

@@ -65,5 +65,4 @@ class EventRepository {
         }
     }
 }
-
 module.exports = EventRepository

@@ -13,10 +13,6 @@ class AppModule {
         this.dependencies[moduleName].push(moduleName);
     }
 
-    //getModules() {
-    //    return this.modules;
-    //}
-
     async start() {
         try {
             const orderedModules = await this.orderModulesByDependencies();
@@ -49,7 +45,6 @@ class AppModule {
             if (!visited[module.constructor.name]) {
                 visited[module.constructor.name] = true;
 
-                //const module = this.modules.find(m => m.constructor.name === moduleName);
                 const dependencies = module.getDependencies();
                 if (Array.isArray(dependencies)) {
                     dependencies.forEach(dependency => {
@@ -64,17 +59,8 @@ class AppModule {
         }
         validModules.forEach(visit);
 
-        //this.modules.forEach(module => visit.call(this, module.constructor.name));
         return orderedModules;
     }
-
-    //setExpressRouter(router) {
-    //    this.expressRouter = router;
-    //}
-
-    //getExpressRouter() {
-    //    return Promise.resolve(this.expressRouter);
-    //}
 }
 
 module.exports = AppModule;
