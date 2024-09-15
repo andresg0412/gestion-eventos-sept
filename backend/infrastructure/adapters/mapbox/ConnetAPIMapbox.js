@@ -1,5 +1,6 @@
 const axios = require('axios');
 require('dotenv').config();
+const MapboxUtils = require('./utils/mapboxUtils');
 class ConnetAPIMapbox {
     
     //OBTENER COORDENADAS DE DIRECCION
@@ -13,7 +14,6 @@ class ConnetAPIMapbox {
             throw error;
         }
     }
-
     //OBTENER UBICACIONES CERCANAS
     async getNearbyLocations(lat, lon) {
         try {
@@ -21,7 +21,9 @@ class ConnetAPIMapbox {
 
             const response = await axios.get(url);
             const data = response.data;
-            return data;
+            const formattedReponse = await MapboxUtils.formatMapboxResponse(data);
+
+            return formattedReponse;
         } catch (error) {
             throw error;
         }

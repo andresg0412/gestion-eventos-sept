@@ -5,11 +5,10 @@ class GeolocationRepository {
         try {
             const query = 'SELECT * FROM events WHERE id = ?';
             const [rows] = await db.execute(query, [eventId]);
-            return rows.length > 0 ? rows[0] : [];
+            return rows.length > 0 ? rows[0] : null;
         } catch (error) {
             throw error;
         }
     }
 }
-
 module.exports = GeolocationRepository;

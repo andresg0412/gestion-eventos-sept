@@ -7,7 +7,7 @@ class GeolocationController {
         try {
             const { eventId } = req.body;
             if(!eventId){
-                throw { status: 400, body: { message: 'Event id is required' } };
+                throw { status: 400, body: { message: 'Se requiere el ID del evento' } };
             }
             const result = await this.GeolocationServiceUseCase.getNearbyLocations(eventId);
             res.status(result.status).json(result.body);
@@ -16,5 +16,4 @@ class GeolocationController {
         }
     }
 }
-
 module.exports = GeolocationController;

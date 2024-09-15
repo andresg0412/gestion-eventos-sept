@@ -27,5 +27,4 @@ router.get('/attendees/:eventId', (req, res) => {
     attendeeController.getAttendeesByEventId(req, res);
 });
 
-
 module.exports = router;

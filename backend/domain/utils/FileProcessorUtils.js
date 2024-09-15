@@ -9,7 +9,6 @@ const readFileAsync = promisify(fs.readFile);
 class FileProcessorUtils {
 
     static async importEvents(file) {
-        console.log('Importando eventos...');
         try {
             const fileBuffer = await readFileAsync(file.path);
             const workbook = read(fileBuffer, { type: 'buffer' });
@@ -44,10 +43,44 @@ class FileProcessorUtils {
                 }
             }
 
-            console.log('Archivo cargado correctamente');
-
             return events;
 
+        } catch (error) {
+            console.error('Error al cargar el archivo:', error);
+            throw new Error('No se pudo cargar el archivo Excel');
+        }
+    }
+
+    static async importAttendees(file) {
+        try {
+            const fileBuffer = await readFileAsync(file.path);
+            const workbook = read(fileBuffer, { type: 'buffer' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+
+            const attendees = [];
+            const range = utils.decode_range(worksheet['!ref']);
+
+            for (let i = range.s.r + 2; i <= range.e.r; i++) {
+                const row = utils.encode_row(i);
+                const cellRef = `${utils.encode_col(range.s.c)}${row}`;
+
+                if (worksheet[cellRef] && worksheet[cellRef].v !== undefined) {
+                    const values = utils.sheet_to_json(worksheet, { header: 1 })[i - 1];
+                    if (values.length > 0) {
+                        const [name, email, eventId] = values;
+                        const attendee = {
+                            name: name?.toString() ?? '',
+                            email: email?.toString() ?? '',
+                            eventId: eventId ? parseInt(eventId.toString(), 10) : 0
+                        };
+                        attendees.push(attendee);
+                    } else {
+                        console.log('No se encontraron valores en la fila:', i);
+                    }
+                }
+            }
+            return attendees;
         } catch (error) {
             console.error('Error al cargar el archivo:', error);
             throw new Error('No se pudo cargar el archivo Excel');

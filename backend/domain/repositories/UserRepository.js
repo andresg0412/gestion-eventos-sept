@@ -8,8 +8,17 @@ class UserRepository {
         try {
             const query = 'SELECT * FROM users';
             const [rows] = await db.execute(query);
-            console.log(rows);
-            return rows.length > 0 ? rows : [];
+
+            if (!rows || rows.length === 0) {
+                return [];
+            };
+
+            const filteredRows = rows.map(user => {
+                const { password_hash, ...userWithoutPassword } = user;
+                return userWithoutPassword;
+            });
+
+            return filteredRows;
         } catch (error) {
             console.error('Error en getAllUsers:', error);
             throw { status: 500, body: { message: 'Error al obtener usuarios repository' } };

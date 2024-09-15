@@ -1,3 +1,4 @@
+const ValidationsUtils = require('../../../../domain/utils/ValidationsUtils');
 class EventController{
     constructor(EventServiceUseCase) {
         this.EventServiceUseCase = EventServiceUseCase;
@@ -6,9 +7,11 @@ class EventController{
     async createEvent(req, res) {
         try {
             const { title, description, startDate, endDate, location, maxAttendees, createdBy } = req.body;
-
-            if (!title || !description || !startDate || !endDate || !location || !maxAttendees || !createdBy) {
-                throw { status: 400, body: { message: 'Todos los campos son requeridos' } };
+            const requiredFields = ['title', 'description', 'startDate', 'endDate', 'location', 'maxAttendees', 'createdBy'];
+            
+            const validationResult = await ValidationsUtils.validateRequiredFields({ ...req.body }, requiredFields);
+            if (validationResult !== null) {
+                throw { status: 400, body: { message: validationResult } };
             }
 
             const result = await this.EventServiceUseCase.createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy });

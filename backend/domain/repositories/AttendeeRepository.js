@@ -6,7 +6,7 @@ class AttendeeRepository {
         try {
             const query = 'SELECT * FROM attendees';
             const [rows] = await db.execute(query);
-            return rows;
+            return rows.length > 0 ? rows : null;
         } catch (error) {
             throw error;
         }
@@ -45,7 +45,7 @@ class AttendeeRepository {
         try {
             const query = 'SELECT * FROM attendees WHERE event_id = ?';
             const [rows] = await db.execute(query, [eventId]);
-            return rows;
+            return rows.length > 0 ? rows : null;
         } catch (error) {
             throw error;
         }
@@ -90,5 +90,26 @@ class AttendeeRepository {
             throw error;
         }
     }
+
+    async getEventById(id) {
+        try {
+            const query = 'SELECT * FROM events WHERE id = ?';
+            const [rows] = await db.execute(query, [id]);
+            return rows.length > 0 ? rows[0] : null;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUserById(id) {
+        try {
+            const query = 'SELECT * FROM users WHERE id = ?';
+            const [rows] = await db.execute(query, [id]);
+            return rows.length > 0 ? rows[0] : null;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
+
 module.exports = AttendeeRepository;

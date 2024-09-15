@@ -1,3 +1,4 @@
+const ValidationsUtils = require('../../../../domain/utils/ValidationsUtils');
 class AttendeeController {
     constructor(AttendeeServiceUseCase) {
         this.AttendeeServiceUseCase = AttendeeServiceUseCase;
@@ -14,6 +15,15 @@ class AttendeeController {
 
     async registerAttendeeToEvent(req, res) {
         try {
+            const { name, email, eventId, userId } = req.body;
+            const requiredFields = ['name', 'email', 'eventId', 'userId'];
+
+            const validationResult = await ValidationsUtils.validateRequiredFields({ ...req.body }, requiredFields);
+
+            if (validationResult !== null) {
+                throw { status: 400, body: { message: validationResult } };
+            }
+            
             const result = await this.AttendeeServiceUseCase.registerAttendeeToEvent(req.body);
             res.status(result.status).json(result.body);
         } catch (error) {
@@ -39,5 +49,4 @@ class AttendeeController {
         }
     }
 }
-
 module.exports = AttendeeController

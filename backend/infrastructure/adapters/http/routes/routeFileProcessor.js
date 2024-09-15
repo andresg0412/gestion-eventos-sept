@@ -15,7 +15,11 @@ const fileProcessorUseCase = new FileProcessorUseCase(new FileProcessorRepositor
 const fileProcessorController = new FileProcessorController(fileProcessorUseCase);
 
 
-router.post('/load-events', upload.single('file'), async (req, res) => {
+router.post('/load-events', authenticateToken, upload.single('file'), async (req, res) => {
     fileProcessorController.uploadEvents(req, res);
+});
+
+router.post('/load-attendees', authenticateToken, upload.single('file'), async (req, res) => {
+    fileProcessorController.uploadAttendees(req, res);
 });
 module.exports = router;
