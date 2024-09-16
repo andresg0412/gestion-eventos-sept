@@ -12,9 +12,8 @@ class UserController {
             if (validationResult !== null) {
                 throw { status: 400, body: { message: validationResult } };
             }
-            
             const result = await this.UserServiceUseCase.createUser({ username, email, password });
-            res.status(result.status).json({ message: 'Usuario creado con éxito' });
+            res.status(result.status).json(result.body);
         } catch (error) {
             res.status(error.status).json(error.body);
         }

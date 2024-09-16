@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const LocationService = require('./adapters/file/locationService');
 const AppModule = require('../application/AppModule');
 const serverConfig = require('../resources/application.json').server;
@@ -12,6 +13,26 @@ const routerArrayManagement = require('./adapters/http/routes/routesArrayManagem
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const app = express();
+
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost'
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        const whitelist = ['http://localhost:3000', 'http://mi-dominio-en-produccion.com', 'http://localhost'];
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
