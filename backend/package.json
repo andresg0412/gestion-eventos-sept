@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "generate-swagger": "node -r express-swagger-generator --openapi-spec ./swagger.json",
-    "test": "set NODE_ENV=test && jest --detectOpenHandles"
+    "test": "jest"
   },
   "author": "Andres",
   "license": "ISC",
