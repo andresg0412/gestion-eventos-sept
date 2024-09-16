@@ -27,10 +27,10 @@ services:
       - ./backend/.env.production
     ports:
       - "5001:5001"
-    deploy:
-      replicas: 5
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  replicas: 5
+    #  restart_policy:
+    #    condition: on-failure
     environment:
       - NODE_ENV=production
     networks:
