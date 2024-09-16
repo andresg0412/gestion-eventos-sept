@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Build Backend Docker Image
+        run: |
+          docker build -t backend-app ./backend
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -t frontend-app ./frontend
+
+      - name: Deploy to AWS Lightsail
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.LIGHTSAIL_IP }}
+          username: ubuntu
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            cd /path/to/your/project
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
