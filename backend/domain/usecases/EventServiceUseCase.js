@@ -6,6 +6,7 @@ class EventServiceUseCase {
 
     async createEvent({ title, description, startDate, endDate, location, maxAttendees, createdBy }) {
         try {
+            const connection = await this.EventRepository.connectdb();
             const now = new Date();
             const validationStartDate = await ValidationsUtils.validateStartDate(startDate);
             if (!validationStartDate) {
@@ -28,6 +29,7 @@ class EventServiceUseCase {
 
     async getAllEvents() {
         try {
+            const connection = await this.EventRepository.connectdb();
             const events = await this.EventRepository.getAllEvents();
             if (!events) {
                 return { status: 404, body: { message: 'Eventos no encontrados' } };
@@ -40,6 +42,7 @@ class EventServiceUseCase {
 
     async getEventById(id) {
         try {
+            const connection = await this.EventRepository.connectdb();
             const event = await this.EventRepository.getEventById(id);
             if (!event) {
                 return { status: 404, body: { message: 'Evento no encontrado' } };
@@ -52,6 +55,7 @@ class EventServiceUseCase {
 
     async updateEvent(id, eventData) {
         try {
+            const connection = await this.EventRepository.connectdb();
             const allowedFields = ['title', 'description', 'startDate', 'endDate', 'location', 'maxAttendees'];
             const fieldsToUpdate = {};
 
@@ -74,6 +78,7 @@ class EventServiceUseCase {
 
     async deleteEvent(id) {
         try {
+            const connection = await this.EventRepository.connectdb();
             const event = await this.EventRepository.deleteEvent(id);
             if (!event) {
                 return { status: 404, body: { message: 'Evento no encontrado' } };

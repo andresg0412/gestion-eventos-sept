@@ -4,6 +4,7 @@ class UserServiceUseCase {
     }
     async getAllUsers() {
         try {
+            const connection = await this.UserRepository.connectdb();
             const users = await this.UserRepository.getAllUsers();
             return { status: 200, body: users };
         } catch (error) {
@@ -12,6 +13,7 @@ class UserServiceUseCase {
     }
     async createUser({ username, email, password }) {
         try {
+            const connection = await this.UserRepository.connectdb();
             const user = await this.UserRepository.createUser({ username, email, password });
             return { status: 200, body: user };
         } catch (error) {

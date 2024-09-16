@@ -3,16 +3,19 @@ require('dotenv').config({ path: '.env' });
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT) || 3306,
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '1234',
-    database: process.env.DB_NAME || 'proyecto-eventos',
-});
+async function createConnection() {
+    try {
+        const connection = await mysql.createConnection({
+            host: DB_HOST || 'localhost',
+            port: parseInt(DB_PORT) || 3306,
+            user: DB_USER || 'root',
+            password: DB_PASSWORD || '1234',
+            database: DB_NAME || 'proyecto-eventos',
+        });
+        return connection;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
-pool.on('error', (err) => {
-    console.error(err);
-});
-
-module.exports = pool;
+module.exports = { createConnection };

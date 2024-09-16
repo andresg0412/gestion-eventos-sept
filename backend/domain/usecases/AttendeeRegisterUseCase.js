@@ -5,6 +5,7 @@ class AttendeeRegisterUseCase {
 
     async getAllAttendees () {
         try {
+            const connection = await this.AttendeeRepository.connectdb();
             const result = await this.AttendeeRepository.getAllAttendees();
             if (!result) {
                 return { status: 404, body: { message: 'No existen asistentes registrados' } };
@@ -17,6 +18,7 @@ class AttendeeRegisterUseCase {
 
     async registerAttendeeToEvent(attendee) {
         try {
+            const connection = await this.AttendeeRepository.connectdb();
             const { name, email, eventId, userId } = attendee;
 
             const event = await this.AttendeeRepository.getEventById(eventId);
@@ -47,6 +49,7 @@ class AttendeeRegisterUseCase {
 
     async deleteAttendee(id) {
         try {
+            const connection = await this.AttendeeRepository.connectdb();
             const result = await this.AttendeeRepository.deleteAttendee(id);
             if (result) {
                 return { status: 200, body: { message: 'Asistente eliminado' } };
@@ -60,6 +63,7 @@ class AttendeeRegisterUseCase {
 
     async getAttendeesByEventId(eventId) {
         try {
+            const connection = await this.AttendeeRepository.connectdb();
             const result = await this.AttendeeRepository.getAttendeesByEventId(eventId);
             if (!result) {
                 return { status: 404, body: { message: 'No existen asistentes registrados' } };

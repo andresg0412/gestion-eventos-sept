@@ -6,6 +6,7 @@ class FileProcessorUseCase {
 
     async uploadEvents(req) {
         try {
+            const connection = await this.FileProcessorRepository.connectdb();
             const filePath = req.file;
             const result = await FileProcessorUtils.importEvents(filePath);
             
@@ -18,6 +19,7 @@ class FileProcessorUseCase {
 
     async uploadAttendees(req) {
         try {
+            const connection = await this.FileProcessorRepository.connectdb();
             const filePath = req.file;
             const userId = req.body.userId;
             const result = await FileProcessorUtils.importAttendees(filePath);

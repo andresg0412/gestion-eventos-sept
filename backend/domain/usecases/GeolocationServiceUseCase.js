@@ -6,6 +6,7 @@ class GeolocationServiceUseCase {
 
     async getNearbyLocations(eventId) {
         try {
+            const connection = await this.GeolocationRepository.connectdb();
             const result = await this.GeolocationRepository.getEventLocation(eventId);
 
             if (!result) {

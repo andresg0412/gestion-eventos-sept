@@ -7,6 +7,7 @@ class AuthUseCase {
         this.UserRepository = UserRepository;
     }
     async loginUser({ email, password }) {
+        const connection = await this.UserRepository.connectdb();
         const user = await this.UserRepository.getUserByUseremail(email);
         if (!user) {
             throw { status: 401, body: { message: 'Credenciales incorrectas' } };

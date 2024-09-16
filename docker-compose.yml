@@ -22,13 +22,15 @@ services:
   backend:
     build:
       context: ./backend
-    network_mode: "host"
+      dockerfile: Dockerfile
     env_file:
       - ./backend/.env.production
     ports:
       - "5001:5001"
     environment:
       - NODE_ENV=production
+    networks:
+      - my-network
 
 networks:
   my-network:
