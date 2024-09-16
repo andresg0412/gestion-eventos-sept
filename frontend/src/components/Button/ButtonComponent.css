@@ -1,0 +1,10 @@
+.buttonComponent{
+    background-color: rgb(158, 158, 158);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2em;
+}

@@ -1,0 +1,18 @@
+.cardComponent {
+    display: flex;
+    width: 90%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: rgb(110, 110, 110);
+    border-radius: 10px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.cardComponent a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+}

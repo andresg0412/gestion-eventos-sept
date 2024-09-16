@@ -10,29 +10,16 @@ const PrivateRouteComponent = ({ element, ...rest }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const stateAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await check(dispatch);
-                setLoading(false);
-            } catch (error) {
-                if (error.response &&error.response.status === 401) {
-                    navigate('/login');
-                }else{
-                    console.log(error);
-                }
-            }finally{
-                setLoading(false);
-            }
-        };
-        checkAuth();
-    }, [dispatch]);
+        setIsAuthenticated(true);
+        setLoading(false);
+    }, [stateAuthenticated]);
 
-    const isAuthenticated = useSelector((state) => !loading && state.auth.isAuthenticated);
-
-    if (loading) {
-        return <div>Loading...</div>;
+    if(loading){
+        return <p>Loading...</p>
     }
 
     return isAuthenticated ? element : <Navigate to="/login" />;
