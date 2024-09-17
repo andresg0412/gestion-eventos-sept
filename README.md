@@ -177,6 +177,12 @@ En el backend desarrollado con Nodejs y Express, consta de una arquitectura en e
 
 En cuanto a herramientas DevOps, el proyecto esta dockerizado y funcionando sin ningun problema con solo levantar el contenedor, con este contenedor fue desplegado en servidor AWS.
 
+### CI/CD
+
+Para implementar un flujo de integración y despliegue continuo (CI/CD) usaría GitHub Actions. Primero, crearía un archivo de configuración .yml dentro de la carpeta .github/workflows/, donde definiría los pasos necesarios para ejecutar las pruebas, construir la aplicación y realizar el despliegue (en el repositorio ya esta este archivo creado y con la configuración inicial que usaría). En cada push o pull request, GitHub Actions desencadenaría automáticamente el flujo.
+Definiría jobs para construir la app, ejecutar los tests unitarios y, si todo pasa correctamente, hacer el despliegue en un entorno de producción o staging, utilizando un proveedor como AWS o Heroku. Configuraría secretos en GitHub para almacenar las credenciales de acceso seguro a los servidores. También agregaría notificaciones de éxito o fallo en el flujo, para asegurarme de que el equipo esté informado.
+Esto permitiría tener un flujo automatizado, fiable y sin intervención manual, asegurando que cada cambio pase por los pasos necesarios antes de llegar a producción.
+
 ## Pruebas
 Este proyecto utiliza **Jest** y **Supertest** para las pruebas del backend.
 
