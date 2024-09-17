@@ -17,6 +17,7 @@
 14. [Despliegue](#despliegue)
 15. Diagrama Arquitectonico
 16. [Video de explicación](#video-de-explicación)
+17. [Plantillas .xlsx para cargar eventos](#plantillas-xlsx)
 
 
 ## Descripción del proyecto
@@ -220,3 +221,10 @@ Para desplegar este proyecto en un servidor de producción, sigue estos pasos:
 Dejo el enlace de explicación del reto:
 
 <a href="https://drive.google.com/file/d/1APnuO4XfZwTilCjD9CWlG7DrWqEkGZ6n/view?usp=drive_link" style="background-color:#4CAF50;border:none;color:white;padding:10px 20px;text-align:center;text-decoration:none;display:inline-block;font-size:16px;">Ver video</a>
+
+
+## Plantillas xlsx
+[plantilla-asistentes.xlsx](https://github.com/user-attachments/files/17022250/plantilla-asistentes.xlsx)
+
+[plantilla-eventos.xlsx](https://github.com/user-attachments/files/17022253/plantilla-eventos.xlsx)
+
