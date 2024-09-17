@@ -4,13 +4,19 @@
 ## Contenido
 1. [Descripción del proyecto](#descripción-del-proyecto)
 2. [Características](#características)
-3. [Características](#características)
 4. [Instalación](#instalación)
-5. [Configuración](#configuración)
-6. [Ejecución](#ejecución)
-7. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-8. [Pruebas](#pruebas)
-9. [Despliegue](#despliegue)
+5. [Creación Base de datos](#base-de-datos)
+6. [Configuración](#configuración)
+7. [Ejecución](#ejecución)
+8. [Desarrollo en Host Público](#desarrollo-en-host-público)
+9. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+10. [Backend](#backend)
+11. [Bases de datos](#bases-de-datos)
+12. [DevOps](#devops)
+13. [Pruebas](#pruebas)
+14. [Despliegue](#despliegue)
+15. Diagrama Arquitectonico
+16. [Video de explicación](#video-de-explicación)
 
 
 ## Descripción del proyecto
@@ -58,9 +64,12 @@ Este proyecto es una aplicación web de gestión de eventos. El backend utiliza 
    npm install
    ```
 
+## Creación base de datos
+
+En tu entorno local crea una base de datos MySQL, y luego con el archivo que encontraras en /backend/create_tables.sql copia ese codigo y ejecutalo en la consola de la base de datos, esto creara las tablas de bases de datos con sus respectivos indices y relaciones.
 
 ## Configuración
-1. Crea un archivo `.env` en la carpeta del backend con las siguientes variables de entorno:
+1. Crea un archivo `.env` en la carpeta del backend con las siguientes variables de entorno (tener en cuenta las credenciales de bases de datos que acabas de crear en el punto anterior):
    ```bash
    DB_HOST=localhost
    DB_USER=root
@@ -110,6 +119,13 @@ Este proyecto es una aplicación web de gestión de eventos. El backend utiliza 
 2. El frontend estará disponible en `http://localhost` y el backend en `http://localhost:5001`.
 
 
+## Desarrollo en Host Público
+
+Para la prueba, he desplegado el proyecto usando Docker y GitHub en un servidor AWS, la base de datos también es de AWS, se puede ver en:
+
+>[!NOTE]
+>http://3.87.46.194:5001/
+
 
 ## Tecnologías Utilizadas
 
@@ -120,6 +136,46 @@ Este proyecto es una aplicación web de gestión de eventos. El backend utiliza 
 | **Base de datos** | MySQL (AWS)                                      |
 | **Contenedores**  | Doker, docker-compose                            |
 | **Despliegue**    | AWS                                              |
+
+
+## Bases de datos
+
+En la siguiente imagen represento graficamente las tablas y sus relaciones de la base de datos, la cual consta de 3 tablas: Users, Events y Attendees, teniendo una relación entre Users y Events de 1 a muchos, ya que un usuario puede crear muchos eventos y un evento puede ser creado por un usuario. Y la relación entre Events y Attendees de muchos a muchos.
+
+![Untitled](https://github.com/user-attachments/assets/e10bf526-f981-4ac8-9e7e-674968fcff86)
+
+### Scripts DDL
+
+Los scripts DDL los puedes encontrar en:
+https://github.com/andresg0412/gestion-eventos-sept/blob/main/backend/create_tables.sql
+
+### Scripts DML
+
+Estos Scripts son manejados solamente por los archivos repository como UserRepository, que son los encargados de hacer las consultas a las bases de datos, acontinuación referencio algunos de los usados:
+- SELECT * FROM attendees
+- SELECT * FROM attendees WHERE id = ?
+- INSERT INTO attendees (event_id, user_id) VALUES (?, ?)
+- DELETE FROM attendees WHERE id = ?
+- SELECT * FROM attendees WHERE event_id = ?
+- SELECT * FROM attendees WHERE user_id = ?
+- SELECT * FROM attendees WHERE email = ? AND event_id = ?
+- INSERT INTO attendees (name, email, event_id, user_id) VALUES (?, ?, ?, ?)
+- SELECT * FROM users WHERE id = ?
+- SELECT * FROM events WHERE id = ?
+- INSERT INTO events (title, description, start_date, end_date, location, max_attendees, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)
+- UPDATE users SET username = ?, email = ? WHERE id = ?
+
+
+## Backend
+
+En el backend desarrollado con Nodejs y Express, consta de una arquitectura en el que la intención es separar por capas para procesar las peticiones, teniendo cada capa y cada clase una función especifica, las capas de Application, Domain e Infrastructure componen el proyecto, en la siguiente ilustración se puede ser la ruta que recorre una petición cuando llega al backend, y cada una tiene una función especifica, igualmente en el video doy una explicación más detallada.
+
+![Untitled (1)](https://github.com/user-attachments/assets/44a9090b-e2a6-4933-85fb-ffa2441a7b26)
+
+
+## DevOps
+
+En cuanto a herramientas DevOps, el proyecto esta dockerizado y funcionando sin ningun problema con solo levantar el contenedor, con este contenedor fue desplegado en servidor AWS.
 
 ## Pruebas
 Este proyecto utiliza **Jest** y **Supertest** para las pruebas del backend.
@@ -153,3 +209,8 @@ Para desplegar este proyecto en un servidor de producción, sigue estos pasos:
    docker-compose up -d
    ```
 
+## Video de explicación
+
+Dejo el enlace de explicación del reto:
+
+<a href="https://drive.google.com/file/d/1APnuO4XfZwTilCjD9CWlG7DrWqEkGZ6n/view?usp=drive_link" style="background-color:#4CAF50;border:none;color:white;padding:10px 20px;text-align:center;text-decoration:none;display:inline-block;font-size:16px;">Ver video</a>
