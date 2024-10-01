@@ -7,17 +7,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    container_name: proy-events-frontend
     networks:
-      - my-network
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./frontend/build:/usr/share/nginx/html
-    networks:
-      - my-network
+      - web-network
 
   backend:
     build:
@@ -27,15 +19,12 @@ services:
       - ./backend/.env.production
     ports:
       - "5001:5001"
-    #deploy:
-    #  replicas: 5
-    #  restart_policy:
-    #    condition: on-failure
+    container_name: proy-events-backend
     environment:
       - NODE_ENV=production
     networks:
-      - my-network
+      - web-network
 
 networks:
-  my-network:
-    driver: bridge
+  web-network:
+    external: true
